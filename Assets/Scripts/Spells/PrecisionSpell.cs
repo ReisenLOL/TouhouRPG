@@ -17,6 +17,7 @@ public class PrecisionSpell : Spell
             {
                 //settingPrecision = false;
                 precisionAmount = 1 - MathF.Abs(0.5f - attackSliderUI.value);
+                attackSliderUI.gameObject.SetActive(false);
                 Debug.Log(precisionAmount);
                 //...sure? i dunno!
             }
@@ -38,5 +39,11 @@ public class PrecisionSpell : Spell
             }
         }
         //wow!
+    }
+
+    protected override void AttackMechanic()
+    {
+        settingPrecision = true;
+        attackSliderUI.gameObject.SetActive(true);
     }
 }

@@ -68,6 +68,10 @@ public class CombatManager : MonoBehaviour
         {
             EnemyTurn(); //haha immediate
         }
+        if (unitsInBattle[currentTurn].TryGetComponent(out PlayerController isPlayer))
+        {
+            currentPlayerTurn = isPlayer; //haha not really immediate
+        }
     }
 
     public void EnemyTurn()

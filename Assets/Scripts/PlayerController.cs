@@ -9,11 +9,22 @@ public class PlayerController : Unit
     private bool isFacingRight = false;
     public bool canMove = true;
     public List<Spell> SpellList = new();
+    public Transform spellFolderObject;
     public static int MP;
     public int MaxMP;
     public static int level;
     public static int exp;
     public static int expToNextLevel = 20;
+
+    protected override void Start()
+    {
+        base.Start();
+        foreach (Spell spellObject in spellFolderObject.GetComponentsInChildren<Spell>())
+        {
+            SpellList.Add(spellObject); //still have to make it so that players can choose spells, this is just predetermined for now
+        }
+    }
+
     void Update()
     {
         if (canMove)
