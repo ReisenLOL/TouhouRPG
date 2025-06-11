@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,12 +19,27 @@ public class SpellUIManager : MonoBehaviour
     public void RebuildSpellList()
     {
         spellUIFrame.gameObject.SetActive(true);
+        foreach (Transform child in spellUIFrame)
+        {
+            Destroy(child.gameObject);
+        }
         List<Spell> spellList = combatManager.currentPlayerTurn.SpellList;
-        for (int i = 0; i < spellList.Count; i++)
+        foreach (Spell spell in spellList)
         {
             Button newButton = Instantiate(templateSpellButton, spellUIFrame);
             newButton.gameObject.SetActive(true);
-            newButton.onClick.AddListener(() => spellList[i].CastSpell(combatManager.currentPlayerTurn));
+            newButton.GetComponentInChildren<TextMeshProUGUI>().text = spell.name;
+            newButton.onClick.AddListener(() => combatManager.StartAttack(spell)); //hell yeah
+            newButton.onClick.AddListener(() => ResetSpellList());
         }
+    }
+
+    public void ResetSpellList()
+    {
+        foreach (Transform child in spellUIFrame)
+        {
+            Destroy(child.gameObject);
+        }
+        spellUIFrame.gameObject.SetActive(false);
     }
 }

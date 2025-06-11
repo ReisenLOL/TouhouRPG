@@ -19,6 +19,9 @@ public class CombatManager : MonoBehaviour
     public bool playerSelectingAttack;
     public PlayerController currentPlayerTurn;
     public EnemyController enemyToAttack;
+    public Spell selectedSpell;
+    public GameObject targetSelectionText;
+    public GameObject combatUI;
     private void Start()
     {
         enemiesToAddToCombat = allEnemies.Find(w => w.UnitID.Trim().ToLower() == CombatSwitcher.instance.currentEnemySpawningData.UnitID.Trim().ToLower());
@@ -83,7 +86,17 @@ public class CombatManager : MonoBehaviour
     public void StartAttack()
     {
         playerSelectingAttack = true;
+        targetSelectionText.SetActive(true);
+        combatUI.SetActive(false);
     }
+    public void StartAttack(Spell spellSelected)
+    {
+        playerSelectingAttack = true;
+        targetSelectionText.SetActive(true);
+        combatUI.SetActive(false);
+        selectedSpell = spellSelected; 
+    }
+
 
     public void Attack(Unit targetEnemy, Unit attackingPlayer)
     {
@@ -105,9 +118,7 @@ public class CombatManager : MonoBehaviour
         {
             EndCombat();
         }
-        
     }
-
     private void Update() 
     {
         if (playerSelectingAttack && Input.GetMouseButtonDown(0)) //i hate this new ide!!! i wish visual studio was on linux!!!!!! vscode sucks!!!!!!!!!!!!!!!!!
@@ -115,11 +126,23 @@ public class CombatManager : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 0);
             if (hit && hit.transform.gameObject.TryGetComponent(out EnemyController isEnemy))
             {
-                enemyToAttack = isEnemy;
-                Attack(enemyToAttack, unitsInBattle[currentTurn]); //SHUT UP RIDER I DON'T CARE!!!!
-                playerSelectingAttack = false;
-                SwitchTurn();
-                //congrats!
+                if (selectedSpell == null)
+                {
+                    enemyToAttack = isEnemy;
+                    Attack(enemyToAttack, unitsInBattle[currentTurn]); //SHUT UP RIDER I DON'T CARE!!!!
+                    playerSelectingAttack = false;
+                    SwitchTurn();
+                    //congrats!
+                }
+                else
+                {
+                    selectedSpell.CastSpell(currentPlayerTurn);
+                    selectedSpell.target = isEnemy;
+                    selectedSpell = null;
+                    playerSelectingAttack = false;
+                }
+                targetSelectionText.SetActive(false);
+                combatUI.SetActive(true);
             }
         }
     }

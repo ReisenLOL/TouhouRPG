@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MPCost: 0
-  damage: 0
+  damage: 3
+  target: {fileID: 0}
+  combatManager: {fileID: 0}
   attackSliderUI: {fileID: 7651768416747656984}
   sliderSpeed: 2
   precisionAmount: 0

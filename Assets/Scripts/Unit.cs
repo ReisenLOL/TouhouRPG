@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Unit : MonoBehaviour
 {
@@ -12,7 +13,10 @@ public class Unit : MonoBehaviour
 
     protected virtual void Start()
     {
-        //healthBar.parent.gameObject.SetActive(false);
+        if (SceneManager.GetActiveScene().name != "Combat")
+        {
+            healthBar.parent.gameObject.SetActive(false);
+        }
     }
     public virtual void TakeDamage(float Damage)
     {

@@ -7,18 +7,19 @@ public class PrecisionSpell : Spell
     public Slider attackSliderUI;
     public float sliderSpeed;
     private bool movingRight = true;
-    private bool settingPrecision = true;
+    private bool settingPrecision = false;
     public float precisionAmount;
     private void Update()
     {
         if (settingPrecision)
         {
-            if (Input.anyKeyDown)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                //settingPrecision = false;
+                settingPrecision = false;
                 precisionAmount = 1 - MathF.Abs(0.5f - attackSliderUI.value);
                 attackSliderUI.gameObject.SetActive(false);
                 Debug.Log(precisionAmount);
+                AfterMechanic();
                 //...sure? i dunno!
             }
             if (movingRight)
@@ -39,6 +40,13 @@ public class PrecisionSpell : Spell
             }
         }
         //wow!
+    }
+
+    protected override void AfterMechanic()
+    {
+        target.TakeDamage(damage * precisionAmount);
+        target = null;
+        combatManager.SwitchTurn(); //I DO NOT CARE, RIDER
     }
 
     protected override void AttackMechanic()
